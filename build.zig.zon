@@ -1,0 +1,11 @@
+.{
+    .name = .anne_benchmark,
+    .version = "1.0.0",
+    .fingerprint = 0xcd86c58f3200770d,
+    .minimum_zig_version = "0.15.0-dev.1380+e98aeeb73",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
