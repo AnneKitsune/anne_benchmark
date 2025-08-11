@@ -130,11 +130,9 @@ pub const Context = struct {
     }
 };
 
-/// Benchmarks a function, printing the result to stderr.
-pub fn benchmark(comptime name: []const u8, comptime f: BenchFn) void {
-    var ctx = Context.init();
-    @call(.auto, f, .{&ctx});
-
+/// Helper function to print results after running a benchmark run.
+/// This is called automatically by `benchmark` and `benchmark_c`, so you should never have to call this yourself.
+pub fn printResult(name: []const u8, ctx: *Context) void {
     var unit: u64 = undefined;
     var unit_name: []const u8 = undefined;
     const avg_time = ctx.averageTime(1);
@@ -152,6 +150,14 @@ pub fn benchmark(comptime name: []const u8, comptime f: BenchFn) void {
     }
 
     warn("{s}: avg {d:.3}{s} ({} iterations)\n", .{ name, ctx.averageTime(unit), unit_name, ctx.iter });
+}
+
+/// Benchmarks a function, printing the result to stderr.
+pub fn benchmark(name: []const u8, f: *const BenchFn) void {
+    var ctx = Context.init();
+    @call(.auto, f, .{&ctx});
+
+    printResult(name, &ctx);
 }
 
 fn argTypeFromFn(comptime f: anytype) type {
