@@ -22,7 +22,7 @@ pipeline {
                     }
                     axis {
                         name 'TARGET'
-                        values 'x86_64-windows', 'x86_64-linux', 'x86_64-macos', 'x86_64-freebsd', 'aarch64-linux', 'aarch64-macos', 'aarch64-windows', 'arm-linux', 'powerpc64-linux', 'wasm32-wasi', 'aarch64-freebsd', 'riskv64-linux', 'aarch64-ios'
+                        values 'x86_64-windows', 'x86_64-linux', 'x86_64-macos', 'x86_64-freebsd', 'aarch64-linux', 'aarch64-macos', 'aarch64-windows', 'arm-linux', 'powerpc64-linux', 'wasm32-wasi', 'aarch64-freebsd', 'riscv64-linux', 'aarch64-ios'
                     }
                 }
                 //excludes {
