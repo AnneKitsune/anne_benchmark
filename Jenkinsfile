@@ -14,7 +14,8 @@ timeout(time: 15, unit: 'MINUTES') {
                 checkout scm
                 sh '$ZIG version'
                 sh '$ZIG build'
-                sh '$ZIG build test'
+                sh 'zig build test'
+                sh '$ZIGBENCH anne-benchmark'
             }
         }
     }, OSX: {
@@ -55,7 +56,7 @@ timeout(time: 15, unit: 'MINUTES') {
             //footer: '',
             //image: '',
             //link: env.BUILD_URL,
-            //result: currentBuild.currentResult,
+            result: currentBuild.currentResult,
             //scmWebUrl: '',
             //thumbnail: '',
             title: JOB_NAME

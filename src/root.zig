@@ -133,23 +133,7 @@ pub const Context = struct {
 /// Helper function to print results after running a benchmark run.
 /// This is called automatically by `benchmark` and `benchmark_c`, so you should never have to call this yourself.
 pub fn printResult(name: []const u8, ctx: *Context) void {
-    var unit: u64 = undefined;
-    var unit_name: []const u8 = undefined;
-    const avg_time = ctx.averageTime(1);
-    assert(avg_time >= 0);
-
-    if (avg_time <= time.ns_per_us) {
-        unit = 1;
-        unit_name = "ns";
-    } else if (avg_time <= time.ns_per_ms) {
-        unit = time.ns_per_us;
-        unit_name = "us";
-    } else {
-        unit = time.ns_per_ms;
-        unit_name = "ms";
-    }
-
-    warn("{s}: avg {d:.3}{s} ({} iterations)\n", .{ name, ctx.averageTime(unit), unit_name, ctx.iter });
+    warn("Benchmark: {s},{d:.0} ns avg,{} iterations\n", .{ name, ctx.averageTime(1), ctx.iter });
 }
 
 /// Benchmarks a function, printing the result to stderr.
@@ -185,23 +169,7 @@ pub fn benchmarkArgs(comptime name: []const u8, comptime f: anytype, comptime ar
         const f2: bench_fn_type = f;
         f2(&ctx, a);
 
-        var unit: u64 = undefined;
-        var unit_name: []const u8 = undefined;
-        const avg_time = ctx.averageTime(1);
-        assert(avg_time >= 0);
-
-        if (avg_time <= time.ns_per_us) {
-            unit = 1;
-            unit_name = "ns";
-        } else if (avg_time <= time.ns_per_ms) {
-            unit = time.ns_per_us;
-            unit_name = "us";
-        } else {
-            unit = time.ns_per_ms;
-            unit_name = "ms";
-        }
-
-        warn("{s} <{s}>: avg {d:.3}{s} ({} iterations)\n", .{ name, if (@TypeOf(a) == type) @typeName(a) else "", ctx.averageTime(unit), unit_name, ctx.iter });
+        printResult(name, &ctx);
     }
 }
 
