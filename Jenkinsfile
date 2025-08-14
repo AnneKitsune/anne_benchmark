@@ -9,6 +9,7 @@ node('linux') {
 try {
 timeout(time: 15, unit: 'MINUTES') {
     matrix {
+        failFast false
         axes {
             axis {
                 name 'SOURCE'
@@ -72,7 +73,7 @@ timeout(time: 15, unit: 'MINUTES') {
                 }
             }
         }
-    }, failFast: false
+    }
 }
 } catch (err) {
     currentBuild.result = 'FAILURE'
