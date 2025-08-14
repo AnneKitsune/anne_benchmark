@@ -47,6 +47,38 @@ timeout(time: 15, unit: 'MINUTES') {
             }
         }
     }, failFast: false
+
+
+    matrix {
+        axes {
+            axis {
+                name 'SOURCE'
+                values 'linux', 'osx', 'win', 'freebsd'
+            }
+            axis {
+                name 'TARGET'
+                values 'x86_64-windows'
+            }
+        }
+        excludes {
+            exclude {
+                axis { name 'SOURCE'; values 'win' }
+                axis { name 'TARGET'; values 'x86_64-windows' }
+            }
+        }
+
+        agent {
+            label "${SOURCE}"
+        }
+        stages {
+            stage('Crosscompile') {
+                steps {
+                    checkout scm
+                    sh '$ZIG build -Dtarget=${TARGET}'
+                }
+            }
+        }
+    }, failFast: false
 }
 } catch (err) {
     currentBuild.result = 'FAILURE'
