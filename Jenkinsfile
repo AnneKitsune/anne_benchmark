@@ -31,9 +31,9 @@ timeout(time: 15, unit: 'MINUTES') {
         stage('Windows') {
             node('win') {
                 checkout scm
-                sh '$ZIG version'
-                sh '$ZIG build'
-                sh '$ZIG build test'
+                bat '%ZIG% version'
+                bat '%ZIG% build'
+                bat '%ZIG% build test'
             }
         }
 
