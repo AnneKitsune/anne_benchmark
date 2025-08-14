@@ -14,7 +14,7 @@ timeout(time: 15, unit: 'MINUTES') {
                 checkout scm
                 sh '$ZIG version'
                 sh '$ZIG build'
-                sh 'zig build test'
+                sh '$ZIG build test'
                 sh '$ZIGBENCH anne-benchmark'
             }
         }
