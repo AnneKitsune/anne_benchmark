@@ -47,7 +47,7 @@ pipeline {
                                 if (isUnix()) {
                                     sh '$ZIG build -Dtarget=${TARGET}'
                                 } else {
-                                    bat '%ZIG% build -Dtarget=${TARGET}'
+                                    bat '%ZIG% build -Dtarget=%TARGET%'
                                 }
                             }
                         }
