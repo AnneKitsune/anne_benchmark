@@ -28,7 +28,7 @@ timeout(time: 15, unit: 'MINUTES') {
         }
     }, c: {
         stage('Windows') {
-            node('windows') {
+            node('win') {
                 checkout scm
                 sh 'zig version'
                 sh 'zig build'
@@ -38,7 +38,7 @@ timeout(time: 15, unit: 'MINUTES') {
 
     }, d: {
         stage('FreeBSD') {
-            node('bsd') {
+            node('freebsd') {
                 checkout scm
                 sh 'zig version'
                 sh 'zig build'
