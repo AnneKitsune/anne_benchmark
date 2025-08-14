@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage ('All') {
             parallel {
+                failFast false
                 stage('linux') {
                     agent { label 'linux' }
                     steps {
