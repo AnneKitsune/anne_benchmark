@@ -9,7 +9,7 @@ node('linux') {
 
 try {
 timeout(time: 15, unit: 'MINUTES') {
-    parallel a: {
+    parallel Linux: {
         stage('Linux') {
             node('linux') {
                 checkout scm
@@ -18,7 +18,7 @@ timeout(time: 15, unit: 'MINUTES') {
                 sh '$ZIG build test'
             }
         }
-    }, b: {
+    }, OSX: {
         stage('OSX') {
             node('osx') {
                 checkout scm
@@ -27,7 +27,7 @@ timeout(time: 15, unit: 'MINUTES') {
                 sh '$ZIG build test'
             }
         }
-    }, c: {
+    }, Windows: {
         stage('Windows') {
             node('win') {
                 checkout scm
@@ -37,7 +37,7 @@ timeout(time: 15, unit: 'MINUTES') {
             }
         }
 
-    }, d: {
+    }, FreeBSD: {
         stage('FreeBSD') {
             node('freebsd') {
                 checkout scm
