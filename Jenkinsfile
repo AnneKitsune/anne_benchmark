@@ -3,7 +3,6 @@ node('linux') {
     script {
         checkout scm
         env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B HEAD', returnStdout: true).trim()
-        env.DISCORDHOOK = credentials('discord_hook')
     }
 }
 
@@ -49,17 +48,19 @@ timeout(time: 15, unit: 'MINUTES') {
     }, failFast: false
 }
 } finally {
-  discordSend(
-      webhookURL: env.DISCORDHOOK,
-      description: GIT_COMMIT_MSG,
-      footer: '',
-      image: '',
-      link: env.BUILD_URL,
-      result: currentBuild.currentResult,
-      scmWebUrl: '',
-      thumbnail: '',
-      title: JOB_NAME
-  )
+    withCredentials([string(credentialsId: 'discord_hook', variable: 'DISCORDHOOK')]) {
+        discordSend(
+            webhookURL: DISCORDHOOK,
+            description: GIT_COMMIT_MSG,
+            footer: '',
+            image: '',
+            link: env.BUILD_URL,
+            result: currentBuild.currentResult,
+            scmWebUrl: '',
+            thumbnail: '',
+            title: JOB_NAME
+        )
+    }
 }
 }
 
