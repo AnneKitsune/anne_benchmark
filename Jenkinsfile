@@ -8,47 +8,6 @@ node('linux') {
 
 try {
 timeout(time: 15, unit: 'MINUTES') {
-    parallel Linux: {
-        stage('Linux') {
-            node('linux') {
-                checkout scm
-                sh '$ZIG version'
-                sh '$ZIG build'
-                sh '$ZIG build test'
-                sh '$ZIGBENCH anne-benchmark'
-            }
-        }
-    }, OSX: {
-        stage('OSX') {
-            node('osx') {
-                checkout scm
-                sh '$ZIG version'
-                sh '$ZIG build'
-                sh '$ZIG build test'
-            }
-        }
-    }, Windows: {
-        stage('Windows') {
-            node('win') {
-                checkout scm
-                bat '%ZIG% version'
-                bat '%ZIG% build'
-                bat '%ZIG% build test'
-            }
-        }
-
-    }, FreeBSD: {
-        stage('FreeBSD') {
-            node('freebsd') {
-                checkout scm
-                sh '$ZIG version'
-                sh '$ZIG build'
-                sh '$ZIG build test'
-            }
-        }
-    }, failFast: false
-
-
     matrix {
         axes {
             axis {
@@ -57,24 +16,57 @@ timeout(time: 15, unit: 'MINUTES') {
             }
             axis {
                 name 'TARGET'
-                values 'x86_64-windows'
+                values 'x86_64-windows', 'x86_64-linux', 'x86_64-macos', 'x86_64-freebsd'
             }
         }
         excludes {
-            exclude {
-                axis { name 'SOURCE'; values 'win' }
-                axis { name 'TARGET'; values 'x86_64-windows' }
-            }
+            //exclude {
+                //axis { name 'SOURCE'; values 'win' }
+                //axis { name 'TARGET'; values 'x86_64-windows' }
+            //}
         }
 
         agent {
             label "${SOURCE}"
         }
         stages {
-            stage('Crosscompile') {
+            stage('Checkout') {
+                checkout scm
+            }
+            stage('Compile') {
                 steps {
-                    checkout scm
-                    sh '$ZIG build -Dtarget=${TARGET}'
+                    if (isUnix()) {
+                        sh '$ZIG build -Dtarget=${TARGET}'
+                    } else {
+                        bat '%ZIG% build -Dtarget=${TARGET}'
+                    }
+                }
+            }
+            stage('Test') {
+                when {
+                    expression {
+                        (env.SOURCE == 'linux' && env.TARGET == 'x86_64-linux')
+                        || (env.SOURCE == 'win' && env.TARGET == 'x86_64-windows')
+                        || (env.SOURCE == 'osx' && env.TARGET == 'x86_64-macos')
+                        || (env.SOURCE == 'freebsd' && env.TARGET == 'x86_64-freebsd')
+                    }
+                    beforeAgent true
+                }
+                steps {
+                    if (isUnix()) {
+                        sh '$ZIG build test'
+                    } else {
+                        bat '%ZIG% build test'
+                    }
+                }
+            }
+            stage('Benchmark') {
+                when {
+                    expression { env.SOURCE == 'linux' && env.TARGET == 'x86_64-linux' }
+                    beforeAgent true
+                }
+                steps {
+                    sh '$ZIGBENCH anne-benchmark'
                 }
             }
         }
