@@ -12,27 +12,27 @@ timeout(time: 15, unit: 'MINUTES') {
         stage('Linux') {
             node('linux') {
                 checkout scm
-                sh 'zig version'
-                sh 'zig build'
-                sh 'zig build test'
+                sh '$ZIG version'
+                sh '$ZIG build'
+                sh '$ZIG build test'
             }
         }
     }, b: {
         stage('OSX') {
             node('osx') {
                 checkout scm
-                sh 'zig version'
-                sh 'zig build'
-                sh 'zig build test'
+                sh '$ZIG version'
+                sh '$ZIG build'
+                sh '$ZIG build test'
             }
         }
     }, c: {
         stage('Windows') {
             node('win') {
                 checkout scm
-                sh 'zig version'
-                sh 'zig build'
-                sh 'zig build test'
+                sh '$ZIG version'
+                sh '$ZIG build'
+                sh '$ZIG build test'
             }
         }
 
@@ -40,9 +40,9 @@ timeout(time: 15, unit: 'MINUTES') {
         stage('FreeBSD') {
             node('freebsd') {
                 checkout scm
-                sh 'zig version'
-                sh 'zig build'
-                sh 'zig build test'
+                sh '$ZIG version'
+                sh '$ZIG build'
+                sh '$ZIG build test'
             }
         }
     }, failFast: false
