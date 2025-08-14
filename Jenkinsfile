@@ -6,8 +6,10 @@ pipeline {
         stage('Prepare') {
             agent { label 'linux' }
             steps {
-                checkout scm
-                env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B HEAD', returnStdout: true).trim()
+                script {
+                    checkout scm
+                    env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B HEAD', returnStdout: true).trim()
+                }
             }
         }
         stage ('Matrix') {
