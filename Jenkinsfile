@@ -23,26 +23,30 @@ pipeline {
                         values 'x86_64-windows', 'x86_64-linux', 'x86_64-macos', 'x86_64-freebsd'
                     }
                 }
-                excludes {
+                //excludes {
                     //exclude {
                         //axis { name 'SOURCE'; values 'win' }
                         //axis { name 'TARGET'; values 'x86_64-windows' }
                     //}
-                }
+                //}
 
                 agent {
                     label "${SOURCE}"
                 }
                 stages {
                     stage('Checkout') {
-                        checkout scm
+                        steps {
+                            checkout scm
+                        }
                     }
                     stage('Compile') {
                         steps {
-                            if (isUnix()) {
-                                sh '$ZIG build -Dtarget=${TARGET}'
-                            } else {
-                                bat '%ZIG% build -Dtarget=${TARGET}'
+                            script {
+                                if (isUnix()) {
+                                    sh '$ZIG build -Dtarget=${TARGET}'
+                                } else {
+                                    bat '%ZIG% build -Dtarget=${TARGET}'
+                                }
                             }
                         }
                     }
@@ -59,10 +63,12 @@ pipeline {
                             beforeAgent true
                         }
                         steps {
-                            if (isUnix()) {
-                                sh '$ZIG build test'
-                            } else {
-                                bat '%ZIG% build test'
+                            script {
+                                if (isUnix()) {
+                                    sh '$ZIG build test'
+                                } else {
+                                    bat '%ZIG% build test'
+                                }
                             }
                         }
                     }
