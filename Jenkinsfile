@@ -45,10 +45,12 @@ timeout(time: 15, unit: 'MINUTES') {
             stage('Test') {
                 when {
                     expression {
-                        (env.SOURCE == 'linux' && env.TARGET == 'x86_64-linux')
-                        || (env.SOURCE == 'win' && env.TARGET == 'x86_64-windows')
-                        || (env.SOURCE == 'osx' && env.TARGET == 'x86_64-macos')
-                        || (env.SOURCE == 'freebsd' && env.TARGET == 'x86_64-freebsd')
+                        return (
+                            (env.SOURCE == 'linux' && env.TARGET == 'x86_64-linux')
+                            || (env.SOURCE == 'win' && env.TARGET == 'x86_64-windows')
+                            || (env.SOURCE == 'osx' && env.TARGET == 'x86_64-macos')
+                            || (env.SOURCE == 'freebsd' && env.TARGET == 'x86_64-freebsd')
+                        )
                     }
                     beforeAgent true
                 }
