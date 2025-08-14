@@ -3,6 +3,7 @@ node('linux') {
     script {
         checkout scm
         env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B HEAD', returnStdout: true).trim()
+        env.DISCORDHOOK = credentials('discord_hook')
     }
 }
 
@@ -49,7 +50,7 @@ timeout(time: 15, unit: 'MINUTES') {
 }
 } finally {
   discordSend(
-      webhookURL: credentials('discord_hook'),
+      webhookURL: env.DISCORDHOOK,
       description: GIT_COMMIT_MSG,
       footer: '',
       image: '',
