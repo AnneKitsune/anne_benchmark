@@ -51,13 +51,13 @@ timeout(time: 15, unit: 'MINUTES') {
     withCredentials([string(credentialsId: 'discord_hook', variable: 'DISCORDHOOK')]) {
         discordSend(
             webhookURL: DISCORDHOOK,
-            description: GIT_COMMIT_MSG,
-            footer: '',
-            image: '',
-            link: env.BUILD_URL,
-            result: currentBuild.currentResult,
-            scmWebUrl: '',
-            thumbnail: '',
+            description: env.GIT_COMMIT_MSG,
+            //footer: '',
+            //image: '',
+            //link: env.BUILD_URL,
+            //result: currentBuild.currentResult,
+            //scmWebUrl: '',
+            //thumbnail: '',
             title: JOB_NAME
         )
     }
