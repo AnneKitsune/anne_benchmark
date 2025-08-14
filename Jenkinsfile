@@ -48,6 +48,10 @@ timeout(time: 15, unit: 'MINUTES') {
         }
     }, failFast: false
 }
+} catch (err) {
+    currentBuild.result = 'FAILURE'
+    currentBuild.currentResult = 'FAILURE'
+    throw err
 } finally {
     withCredentials([string(credentialsId: 'discord_hook', variable: 'DISCORDHOOK')]) {
         discordSend(
