@@ -1,7 +1,34 @@
-@Library('jenkins_zig') _
-pipeline(
-    enableBenchmarks: false,
-    osList: ['linux', 'win', 'osx', 'freebsd', 'web'],
-)
+pipeline {
+    agent none
 
-
+    stages {
+        stage('linux') {
+            agent { label 'linux' }
+            steps {
+                sh "${ZIG} build"
+                sh "${ZIG} build test"
+            }
+        }
+        stage('freebsd') {
+            agent { label 'freebsd' }
+            steps {
+                sh "${ZIG} build"
+                sh "${ZIG} build test"
+            }
+        }
+        stage('osx') {
+            agent { label 'osx' }
+            steps {
+                sh "${ZIG} build"
+                sh "${ZIG} build test"
+            }
+        }
+        stage('windows') {
+            agent { label 'win' }
+            steps {
+                sh "${ZIG} build"
+                sh "${ZIG} build test"
+            }
+        }
+    }
+}
